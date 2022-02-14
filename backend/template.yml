@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: "AWS::Serverless-2016-10-31"
 
+Parameters:
+  NotificationEmail:
+    Type: String
+
 Resources:
   MyApi:
     Type: AWS::Serverless::Api
@@ -49,8 +53,6 @@ Resources:
             Path: /hello
             Method: GET
 
-
-
   ExampleTable:
     Type: "AWS::DynamoDB::Table"
     Properties:
@@ -62,6 +64,31 @@ Resources:
           KeyType: "HASH"
       BillingMode: "PAY_PER_REQUEST"
       TableName: "ExampleTable"
+
+  AlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+      - Protocol: email
+        Endpoint: !Ref NotificationEmail
+
+  Alarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: "Alarm that gets trigger when there are 1 API Gateway error in 1 minute"
+      Namespace: "AWS/ApiGateway"
+      MetricName: "5XXError"
+      Period: 60
+      Statistic: Sum
+      DatapointsToAlarm: 1
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref AlarmTopic
+      Dimensions:
+        - Name: ApiName
+          Value: !Sub ${AWS::StackName}
 
 Outputs:
   ApiUrl:

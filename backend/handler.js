@@ -6,23 +6,32 @@ let dynamo = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.TABLE_NAME;
 
 exports.saveHello = async (event) => {
-  const name = event.queryStringParameters.name;
 
-  const item = {
-    name: name,
-    date: Date.now(),
-  };
+  const random = Math.random();
+  console.log(random)
 
-  console.log(item);
-  const savedItem = await saveItem(item);
+  if (random > 0.5) {
+    const err = new Error('Im an error!')
+    throw err
+  }
 
-  return {
-    statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-    body: JSON.stringify(savedItem),
-  };
+    const name = event.queryStringParameters.name;
+
+    const item = {
+      name: name,
+      date: Date.now(),
+    };
+
+    console.log(item);
+    const savedItem = await saveItem(item);
+
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(savedItem),
+    };
 };
 
 exports.getHello = async (event) => {
