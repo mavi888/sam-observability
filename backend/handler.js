@@ -3,6 +3,8 @@
 const AWS = require("aws-sdk");
 let dynamo = new AWS.DynamoDB.DocumentClient();
 
+const { metricScope } = require("aws-embedded-metrics");
+
 const TABLE_NAME = process.env.TABLE_NAME;
 
 exports.saveHello = async (event) => {
@@ -25,50 +27,45 @@ exports.saveHello = async (event) => {
     console.log(item);
     const savedItem = await saveItem(item);
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(savedItem),
-    };
+    return getResponse(savedItem);
 };
 
-exports.getHello = async (event) => {
-  const name = event.queryStringParameters.name;
+exports.getHello = metricScope(metrics =>
+  async (event) => {
+    metrics.setNamespace('gretter')
 
-  try {
-    const item = await getItem(name);
-    console.log(item);
+    const name = event.queryStringParameters.name;
 
-    if (item.date) {
-      const d = new Date(item.date);
+    try {
+        const item = await getItem(name);
+    
+        if (item.date) {
+            const d = new Date(item.date);
 
-      const message = `Was greeted on ${d.getDate()}/${
-        d.getMonth() + 1
-      }/${d.getFullYear()}`;
+            const message = `Was greeted on ${d.getDate()}/${
+                d.getMonth() + 1
+            }/${d.getFullYear()}`;
 
-      return {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify(message),
-      };
+            metrics.putDimensions({Service: "GetName"});
+            metrics.putMetric("GetName", 1, "put");
+            metrics.setProperty("Name", name);
+            metrics.setProperty("Result", item);
+
+            return getResponse(message);
+        }
+    } catch (e) {
+        console.log(e);
+
+        const message = "Nobody was greeted with that name";
+        
+        metrics.putDimensions({Service: "GetName"});
+        metrics.putMetric("NotFound", 1, "notFound");
+        metrics.setProperty("Name", name);
+
+        return getResponse(message);
     }
-  } catch (e) {
-    console.log(e);
-
-    const message = "Nobody was greeted with that name";
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(message),
-    };
   }
-};
+);
 
 async function getItem(name) {
   console.log("getItem");
@@ -105,4 +102,11 @@ async function saveItem(item) {
     .then(() => {
       return item;
     });
+}
+
+function getResponse(message) {
+  return {
+      statusCode: 200,
+      body: JSON.stringify(message),
+    };
 }

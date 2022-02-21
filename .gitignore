@@ -5,3 +5,4 @@ client/yarn.lock
 client/yarn.lock
 diagrams/.DS_Store
 backend/package-lock.json
+backend/node_modules/

@@ -78,3 +78,5 @@ Say yes to all the prompts. It will ask you if you want to delete all the S3 buc
 
 - [Video about Cloudwatch alarms in English](https://youtu.be/PII5_luwcAo)
 - [Video about Cloudwatch alarms in Spanish](https://youtu.be/uS0QE0NeqpA)
+- [Video about Cloudwatch logs in English](https://youtu.be/2vpy8bi-fPk)
+- Video about Cloudwatch logs in Spanish - soon
