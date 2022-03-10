@@ -11,6 +11,7 @@ Observability is part of the Well Architected Framework Pillar 1 - Operational e
 In this demo you will see:
 
 - How to configure an Amazon Cloudwatch Alarm using AWS SAM
+- How to send structure logs and metrics to Cloudwatch Logs using [aws-embedded-metrics](https://github.com/awslabs/aws-embedded-metrics-node) library
 - More to come...
 
 ## Architecture of the application
@@ -79,4 +80,4 @@ Say yes to all the prompts. It will ask you if you want to delete all the S3 buc
 - [Video about Cloudwatch alarms in English](https://youtu.be/PII5_luwcAo)
 - [Video about Cloudwatch alarms in Spanish](https://youtu.be/uS0QE0NeqpA)
 - [Video about Cloudwatch logs in English](https://youtu.be/2vpy8bi-fPk)
-- Video about Cloudwatch logs in Spanish - soon
+- [Video about Cloudwatch logs in Spanish](https://youtu.be/UBPPGJaBIVY)
