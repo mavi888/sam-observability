@@ -12,7 +12,8 @@ In this demo you will see:
 
 - How to configure an Amazon Cloudwatch Alarm using AWS SAM
 - How to send structure logs and metrics to Cloudwatch Logs using [aws-embedded-metrics](https://github.com/awslabs/aws-embedded-metrics-node) library
-- More to come...
+- How to instrument AWS Lambda and API Gateway for sending information to X-Ray
+- How to create segments and subsegments for X-Ray
 
 ## Architecture of the application
 
@@ -81,3 +82,5 @@ Say yes to all the prompts. It will ask you if you want to delete all the S3 buc
 - [Video about Cloudwatch alarms in Spanish](https://youtu.be/uS0QE0NeqpA)
 - [Video about Cloudwatch logs in English](https://youtu.be/2vpy8bi-fPk)
 - [Video about Cloudwatch logs in Spanish](https://youtu.be/UBPPGJaBIVY)
+- [Video about X-Ray and traces in English](https://youtu.be/OOScvywKj9s)
+- [Video about X-Ray and traces in Spanish](https://youtu.be/UBPPGJaBIVY)

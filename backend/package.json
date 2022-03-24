@@ -10,6 +10,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "aws-embedded-metrics": "^2.0.4"
+    "aws-embedded-metrics": "^2.0.4",
+    "aws-xray-sdk-core": "^3.3.4",
+    "axios": "^0.26.1"
   }
 }

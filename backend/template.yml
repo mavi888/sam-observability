@@ -4,6 +4,14 @@ Transform: "AWS::Serverless-2016-10-31"
 Parameters:
   NotificationEmail:
     Type: String
+  ThirdPartyUrl:
+    Type: String
+
+Globals: 
+  Function:
+    Tracing: Active
+  Api:
+    TracingEnabled: true
 
 Resources:
   MyApi:
@@ -33,7 +41,6 @@ Resources:
             RestApiId: !Ref MyApi
             Path: /hello
             Method: POST
-
   GetHelloFunction:
     Type: "AWS::Serverless::Function"
     Properties:
@@ -51,6 +58,25 @@ Resources:
           Properties:
             RestApiId: !Ref MyApi
             Path: /hello
+            Method: GET
+  SendToThirdPartyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: xrayHandler.sendTo3rdParty
+      Runtime: nodejs14.x
+      Environment:
+          Variables:
+            TABLE_NAME: ExampleTable
+            THIRD_PARTY_URL: !Ref ThirdPartyUrl
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: ExampleTable
+      Events:
+        HelloAPI:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /call
             Method: GET
 
   ExampleTable:
